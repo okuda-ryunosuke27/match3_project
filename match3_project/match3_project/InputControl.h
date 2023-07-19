@@ -19,5 +19,5 @@ int Input_Escape(void);			//エスケープキーの入力
 int GetOldKey(int key);			//過去押されていたキー
 int GetNowKey(int key);			//現在押されているキー
 int GetKeyFlg(int key);			//キーが押されているか
-int GetMousePositionX(int key);	//マウスポイントのX
-int GetMousePositionY(int key);	//マウスポイントのY
+int GetMousePositionX(void);	//マウスポイントのX
+int GetMousePositionY(void);	//マウスポイントのY
