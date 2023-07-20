@@ -48,5 +48,60 @@ int SceneManager_Initialize(GAME_MODE mode)
 	}
 
 	//ゲームクリア画面
+	Read_Error = GameClearScene_Initialize();
+	if (Read_Error == D_ERROR)
+	{
+		return D_ERROR;
+	}
+
+	//ゲームオーバー画面
+	Read_Error = GameOverScene_Initialize();
+	if (Read_Error == D_ERROR)
+	{
+		return D_ERROR;
+	}
+
+	Game_Mode = mode;
+	Next_Mode = Game_Mode;
+
+	return Read_Error;
 }
 
+/*********************************
+シーン管理機能：更新処理
+引　数：なし
+戻り値：なし
+*********************************/
+void SceneManager_Update(void)
+{
+	//前フレームとゲームモードが違っていたらシーンを切り替える
+	if (Game_Mode != Next_Mode)
+	{
+		SceneManager_Initialize(Next_Mode);
+	}
+
+	//各画面の更新処理
+	switch (Game_Mode)
+	{
+		case E_TITLE:
+			TitleScene_Update();
+			break;
+		case E_GAMEMAIN:
+			GameMainScene_Update();
+			break;
+		case E_GAME_CLEAR:
+			GameClearScene_Update();
+			break;
+		case E_GAME_OVER:
+			GameOverScene_Update();
+			break;
+		default:
+			break;
+	}
+}
+
+/*********************************
+シーン管理機能：描画処理
+引　数：なし
+戻り値：なし
+*********************************/
