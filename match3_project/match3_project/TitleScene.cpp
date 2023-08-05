@@ -82,7 +82,7 @@ void TitleScene_Update(void)
 引　数：なし
 戻り値：なし
 *********************************/
-void Title_Scene_Draw(void)
+void TitleScene_Draw(void)
 {
 	//タイトル画面を表示
 	DrawGraph(0, 0, TitleImage, FALSE);

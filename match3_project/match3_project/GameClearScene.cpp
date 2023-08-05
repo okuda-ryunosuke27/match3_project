@@ -25,7 +25,7 @@ int GameClearFlag;
 引　数：なし
 戻り値：エラー情報
 *********************************/
-int GameClearScene_Iinitialize(void)
+int GameClearScene_Initialize(void)
 {
 	int ret = 0;
 

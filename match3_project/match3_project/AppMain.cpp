@@ -79,7 +79,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		ClearDrawScreen();
 
 		//シーンマネージャー描画処理
-		SceneManeger_Draw();
+		SceneManager_Draw();
 
 		//フレームレート制御処理
 		FreamControl_Update();

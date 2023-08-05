@@ -23,6 +23,6 @@ enum  GAME_MODE
 *********************************/
 int SceneManager_Initialize(GAME_MODE mode);	//‰Šú‰»ˆ—
 void SceneManager_Update(void);					//XVˆ—
-void SceneManeger_Draw(void);					//•`‰æˆ—
+void SceneManager_Draw(void);					//•`‰æˆ—
 
 void Change_Scene(GAME_MODE mode);				//scene•ÏXˆ—
