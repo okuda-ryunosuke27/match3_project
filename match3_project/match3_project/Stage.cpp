@@ -175,5 +175,94 @@ void StageDraw(void)
 *********************************/
 void CreateBlock(void)
 {
+	int Check = 0;
+	int i, j;
 
+	do
+	{
+		Check = 0;
+		for ( i = 0; i < HEIGHT; i++)
+		{
+			for ( j = 0; j < WIDTH; j++)
+			{
+				if (j == 0 || j == WIDTH - 1 || i == HEIGHT - 1 || i == 0)
+				{
+					Block[i][j].flg = FALSE;
+					Block[i][j].image = NULL;
+				}
+				else
+				{
+					Block[i][j].flg = TRUE;
+					Block[i][j].x = (j - 1) * BLOCKSIZE;
+					Block[i][j].y = (i - 1) * BLOCKSIZE;
+					Block[i][j].width = BLOCKSIZE;
+					Block[i][j].height = BLOCKSIZE;
+					Block[i][j].image = GetRand(7) + 1;//1～8の乱数
+				}
+			}
+		}
+
+		//連鎖チェック
+		for ( i = 1; i < HEIGHT - 1; i++)
+		{
+			for ( j = 1; j < WIDTH - 1; j++)
+			{
+				Check += combo_check(i, j);
+			}
+		}
+	} while (Check != 0);
+
+	for ( i = 0; i < ITEM_MAX; i++)
+	{
+		Item[i] = 0;
+	}
+}
+
+/*********************************
+ステージ制御機能：ブロック選択処理
+引数：なし
+戻り値：なし
+*********************************/
+void SelectBlock(void)
+{
+	int TmpBlock;
+	int Result;
+
+	//カーソル座標の取得
+	Select[SELECT_CURSOR].x = GetMousePositionX() / BLOCKSIZE;
+	Select[SELECT_CURSOR].y = GetMousePositionY() / BLOCKSIZE;
+
+	//選択ブロックの範囲を制御
+	if (Select[SELECT_CURSOR].x < 0)
+	{
+		Select[SELECT_CURSOR].x = 0;
+	}
+	if (Select[SELECT_CURSOR].x > WIDTH - 3)
+	{
+		Select[SELECT_CURSOR].x = WIDTH - 3;
+	}
+	if (Select[SELECT_CURSOR].y < 0)
+	{
+		Select[SELECT_CURSOR].y = 0;
+	}
+	if (Select[SELECT_CURSOR].y > HEIGHT - 3)
+	{
+		Select[SELECT_CURSOR].y = HEIGHT - 3;
+	}
+
+	//クリックでブロックを選択
+	if (GetKeyFlg(MOUSE_INPUT_LEFT))
+	{
+		//クリック効果音
+		PlaySoundMem(ClickSE, DX_PLAYTYPE_BACK);
+		if (ClickStatus == E_NONE)
+		{
+			Select[NEXT_CURSOR].x = Select[SELECT_CURSOR].x;
+			Select[NEXT_CURSOR].y = Select[SELECT_CURSOR].y;
+			ClickStatus = E_ONCE;
+		}
+		else if(ClickStatus==E_ONCE&&
+			((abs(Select[NEXT_CURSOR].x-Select[SELECT_CURSOR].x)==1&&
+			(abs)))
+	}
 }
