@@ -311,16 +311,6 @@ void SelectBlock(void)
 *********************************/
 void FadeOutBlock(void)
 {
-
-}
-
-/*********************************
-ステージ制御機能：ブロック移動処理
-引数：なし
-戻り値：なし
-*********************************/
-void MoveBlock(void)
-{
 	static int BlendMode = 255;
 	int i, j;
 
@@ -332,11 +322,11 @@ void MoveBlock(void)
 
 	//描画モードをアルファブレンドにする
 	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, BlendMode);
-	for ( i = 1; i < HEIGHT - 1; i++)
+	for (i = 1; i < HEIGHT - 1; i++)
 	{
-		for ( j = 1; j < WIDTH - 1; j++)
+		for (j = 1; j < WIDTH - 1; j++)
 		{
-			if (Block[i][j].image == 0) 
+			if (Block[i][j].image == 0)
 			{
 				DrawGraph(Block[i][j].x, Block[i][j].y, BlockImage[Block[i][j].backup], TRUE);
 			}
@@ -354,6 +344,16 @@ void MoveBlock(void)
 		Stage_State = 2;
 		StopSoundMem(FadeOutSE);
 	}
+}
+
+/*********************************
+ステージ制御機能：ブロック移動処理
+引数：なし
+戻り値：なし
+*********************************/
+void MoveBlock(void)
+{
+	
 }
 
 /*********************************
