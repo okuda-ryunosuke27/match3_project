@@ -589,11 +589,11 @@ void combo_check_w(int y, int x, int* cnt, int* col)
 
 	if (Block[y][x + 1].image == Color)
 	{
-		combo_check_h(y, x + 1, cnt, col);
+		combo_check_w(y, x + 1, cnt, col);
 	}
 	if (Block[y][x - 1].image == Color)
 	{
-		combo_check_h(y, x - 1, cnt, col);
+		combo_check_w(y, x - 1, cnt, col);
 	}
 }
 
