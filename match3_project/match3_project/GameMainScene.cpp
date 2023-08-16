@@ -84,13 +84,13 @@ void GameMainScene_Update()
 		case 0:
 			SelectBlock();		//ブロックの選択する
 			break;
-		case 1:
+		case 2:
 			MoveBlock();		//ブロックを移動させる
 			break;
-		case 2:
+		case 3:
 			CheckBlock();		//ブロックの確認
 			break;
-		case 3:
+		case 4:
 			CheckClear();		//クリアチェック
 			break;
 		default:

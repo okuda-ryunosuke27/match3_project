@@ -60,7 +60,7 @@ int MoveBlockSE;						//ブロック移動SE
 /*********************************
 プロトタイプ宣言
 *********************************/
-int combo_check(int x, int y);
+int combo_check(int y, int x);
 void combo_check_h(int y, int x, int* cnt, int* col);
 void combo_check_w(int y, int x, int* cnt, int* col);
 void save_block(void);
@@ -154,7 +154,7 @@ void StageDraw(void)
 			if (Block[i][j].flg == TRUE && Block[i][j].image != NULL)
 			{
 				DrawGraph(Block[i][j].x, Block[i][j].y, BlockImage[Block[i][j].image], TRUE);
-				DrawFormatString(Block[i][j].x, Block[i][j].y, 0xffffff, "%d", BlockImage[Block[i][j].image] % 7 + 1);
+				DrawFormatString(Block[i][j].x, Block[i][j].y, 0xffffff, "%d", Block[i][j].image);
 			}
 		}
 	}
@@ -494,7 +494,7 @@ void Set_StageMission(int mission)
 引　数２：ブロックXマス
 戻り値：連鎖有無(0:なし　1:あり)
 *********************************/
-int combo_check(int x, int y)
+int combo_check(int y, int x)
 {
 	int ret = FALSE;
 
