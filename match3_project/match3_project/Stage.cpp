@@ -1,18 +1,18 @@
-#include "Stage.h"
-#include "DxLib.h"
-#include "InputControl.h"
+#include"Stage.h"
+#include"DxLib.h"
+#include"InputControl.h"
 
 /*********************************
 マクロ定義
 *********************************/
-#define HEIGHT			(12)		//ブロック配置サイズ(高さ)
-#define WIDTH			(12)		//ブロック配置サイズ(幅)
-#define BLOCKSIZE		(48)		//ブロックサイズ
-#define BLOCK_IMAGE_MAX	(10)		//ブロック画像数
-#define ITEM_MAX		(8)			//アイテム最大数
-#define SELECT_CURSOR	(0)			
-#define NEXT_CURSOR		(1)			
-#define TMP_CURSOR		(2)			
+#define HEIGHT				(12)	//ブロック配置サイズ(高さ)
+#define WIDTH				(12)	//ブロック配置サイズ(幅)
+#define BLOCKSIZE			(48)	//ブロックサイズ
+#define BLOCK_IMAGE_MAX		(10)	//ブロック画像数
+#define ITEM_MAX			(8)		//アイテム最大する
+#define SELECT_CURSOR		(0)
+#define NEXT_CURSOR			(1)
+#define TMP_CURSOR			(2)
 
 /*********************************
 型定義
@@ -24,7 +24,7 @@ typedef struct
 	int width, height;
 	int image;
 	int backup;
-}T_Object;
+}T_object;
 
 typedef struct
 {
@@ -42,20 +42,20 @@ enum
 /*********************************
 変数宣言
 *********************************/
-T_Object Block[HEIGHT][WIDTH];		//ブロックオブジェクトデータ
-T_CURSOR Select[3];					//セレクトカーソル座標
-int Item[ITEM_MAX];					
-int ClickStatus;					
-int Stage_State;					
-int Stage_Mission;					
-int Stage_Score;					
-int ClearFlag;						
+T_object Block[HEIGHT][WIDTH];			//ブロックオブジェクトデータ
+T_CURSOR Select[3];						//セレクトカーソル座標
+int Item[ITEM_MAX];						//アイテム
+int ClickStatus;						//
+int Stage_State;						//
+int Stage_Mission;						//
+int Stage_Score;						//
+int ClearFlag;							//
 
-int BlockImage[BLOCK_IMAGE_MAX];	//ブロック画像
-int StageImage;						//背景用画像
-int ClickSE;						//クリックSE
-int FadeOutSE;						//フェードアウトSE
-int MoveBlockSE;					//ブロック移動SE
+int BlockImage[BLOCK_IMAGE_MAX];		//
+int StageImage;							//
+int ClickSE;							//クリックSE
+int FadeOutSE;							//フェードアウトSE
+int MoveBlockSE;						//ブロック移動SE
 
 /*********************************
 プロトタイプ宣言
@@ -68,7 +68,7 @@ void restore_block(void);
 
 /*********************************
 ステージ制御機能：初期化処理
-引数：なし
+引　数：なし
 戻り値：エラー情報
 *********************************/
 int StageInitialize(void)
@@ -76,9 +76,9 @@ int StageInitialize(void)
 	int ret = 0;
 	int i;
 
-	//画像の読み込み
-	LoadDivGraph("images/block.png", BLOCK_IMAGE_MAX, BLOCK_IMAGE_MAX, 
-		1, BLOCKSIZE, BLOCKSIZE, BlockImage);
+	//画像読み込み
+	LoadDivGraph("images/block.png", BLOCK_IMAGE_MAX, BLOCK_IMAGE_MAX, 1,
+		BLOCKSIZE, BLOCKSIZE, BlockImage);
 	StageImage = LoadGraph("images/stage.png");
 
 	//音源読み込み
@@ -100,6 +100,7 @@ int StageInitialize(void)
 		Select[i].y = 0;
 	}
 
+	//エラーチェック
 	for ( i = 0; i < BLOCK_IMAGE_MAX; i++)
 	{
 		if (BlockImage[i] == -1)
@@ -108,7 +109,7 @@ int StageInitialize(void)
 			break;
 		}
 	}
-	
+
 	if (StageImage == -1)
 	{
 		ret = -1;
@@ -131,7 +132,7 @@ int StageInitialize(void)
 
 /*********************************
 ステージ制御機能：ステージの描画
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void StageDraw(void)
@@ -142,7 +143,7 @@ void StageDraw(void)
 	for (int i = 0; i < ITEM_MAX; i++)
 	{
 		DrawRotaGraph(540, 245 + i * 30, 0.5f, 0, BlockImage[i + 1], TRUE, 0);
-		DrawFormatString(580, 235 + i * 30, 0xFFFFFF, "%3d", Item[i]);
+		DrawFormatString(580, 235 + i * 30, 0xffffff, "%3d", Item[i]);
 	}
 
 	//ブロックを描画
@@ -153,35 +154,32 @@ void StageDraw(void)
 			if (Block[i][j].flg == TRUE && Block[i][j].image != NULL)
 			{
 				DrawGraph(Block[i][j].x, Block[i][j].y, BlockImage[Block[i][j].image], TRUE);
+				DrawFormatString(Block[i][j].x, Block[i][j].y, 0xffffff, "%d", BlockImage[Block[i][j].image] % 7 + 1);
 			}
 		}
 	}
 
 	//選択ブロックを描画
-	DrawGraph(Select[SELECT_CURSOR].x * BLOCKSIZE, 
-		Select[SELECT_CURSOR].y * BLOCKSIZE, BlockImage[9], TRUE);
-
+	DrawGraph(Select[SELECT_CURSOR].x * BLOCKSIZE, Select[SELECT_CURSOR].y * BLOCKSIZE, BlockImage[9], TRUE);
 	if (ClickStatus != E_NONE)
 	{
-		DrawGraph(Select[NEXT_CURSOR].x * BLOCKSIZE, 
-			Select[NEXT_CURSOR].y * BLOCKSIZE, BlockImage[9], TRUE);
+		DrawGraph(Select[NEXT_CURSOR].x * BLOCKSIZE, Select[NEXT_CURSOR].y * BLOCKSIZE, BlockImage[9], TRUE);
 	}
 
 	//ミッションを描画
 	SetFontSize(20);
-	DrawFormatString(590, 211, 0xFFFFFF, "%3d", Stage_Mission);
+	DrawFormatString(590, 211, 0xffffff, "%3d", Stage_Mission);
 }
 
 /*********************************
 ステージ制御機能：ブロック生成処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void CreateBlock(void)
 {
 	int Check = 0;
 	int i, j;
-
 	do
 	{
 		Check = 0;
@@ -189,6 +187,7 @@ void CreateBlock(void)
 		{
 			for ( j = 0; j < WIDTH; j++)
 			{
+				
 				if (j == 0 || j == WIDTH - 1 || i == HEIGHT - 1 || i == 0)
 				{
 					Block[i][j].flg = FALSE;
@@ -201,12 +200,12 @@ void CreateBlock(void)
 					Block[i][j].y = (i - 1) * BLOCKSIZE;
 					Block[i][j].width = BLOCKSIZE;
 					Block[i][j].height = BLOCKSIZE;
-					Block[i][j].image = GetRand(7) + 1;//1～8の乱数
+					Block[i][j].image = GetRand(7) + 1;
 				}
 			}
 		}
 
-		//連鎖チェック
+		//ブロック連鎖チェック
 		for ( i = 1; i < HEIGHT - 1; i++)
 		{
 			for ( j = 1; j < WIDTH - 1; j++)
@@ -224,7 +223,7 @@ void CreateBlock(void)
 
 /*********************************
 ステージ制御機能：ブロック選択処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void SelectBlock(void)
@@ -245,7 +244,6 @@ void SelectBlock(void)
 	{
 		Select[SELECT_CURSOR].x = WIDTH - 3;
 	}
-
 	if (Select[SELECT_CURSOR].y < 0)
 	{
 		Select[SELECT_CURSOR].y = 0;
@@ -258,19 +256,18 @@ void SelectBlock(void)
 	//クリックでブロックを選択
 	if (GetKeyFlg(MOUSE_INPUT_LEFT))
 	{
-		//クリック効果音
 		PlaySoundMem(ClickSE, DX_PLAYTYPE_BACK);
+
 		if (ClickStatus == E_NONE)
 		{
 			Select[NEXT_CURSOR].x = Select[SELECT_CURSOR].x;
 			Select[NEXT_CURSOR].y = Select[SELECT_CURSOR].y;
 			ClickStatus = E_ONCE;
 		}
-		else if (ClickStatus == E_ONCE &&
-			((abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 1 &&
-			(abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 0)) ||
+		else if (ClickStatus == E_ONCE && ((abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 1) &&
+			abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 0) ||
 			(abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 0 &&
-			(abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 1))))
+			abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 1))
 		{
 			Select[TMP_CURSOR].x = Select[SELECT_CURSOR].x;
 			Select[TMP_CURSOR].y = Select[SELECT_CURSOR].y;
@@ -285,7 +282,7 @@ void SelectBlock(void)
 		Block[Select[NEXT_CURSOR].y + 1][Select[NEXT_CURSOR].x + 1].image = Block[Select[TMP_CURSOR].y + 1][Select[TMP_CURSOR].x + 1].image;
 		Block[Select[TMP_CURSOR].y + 1][Select[TMP_CURSOR].x + 1].image = TmpBlock;
 
-		//連鎖が3つ以上か調べる。
+		//連鎖が3つ以上か調べる
 		Result = 0;
 		Result += combo_check(Select[NEXT_CURSOR].y + 1, Select[NEXT_CURSOR].x + 1);
 		Result += combo_check(Select[TMP_CURSOR].y + 1, Select[TMP_CURSOR].x + 1);
@@ -308,10 +305,9 @@ void SelectBlock(void)
 	}
 }
 
-
 /*********************************
 ステージ制御機能：フェードアウト処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void FadeOutBlock(void)
@@ -327,9 +323,9 @@ void FadeOutBlock(void)
 
 	//描画モードをアルファブレンドにする
 	SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, BlendMode);
-	for (i = 1; i < HEIGHT - 1; i++)
+	for ( i = 1; i < HEIGHT - 1; i++)
 	{
-		for (j = 1; j < WIDTH - 1; j++)
+		for ( j = 1; j < WIDTH - 1; j++)
 		{
 			if (Block[i][j].image == 0)
 			{
@@ -353,7 +349,7 @@ void FadeOutBlock(void)
 
 /*********************************
 ステージ制御機能：ブロック移動処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void MoveBlock(void)
@@ -363,13 +359,13 @@ void MoveBlock(void)
 	PlaySoundMem(MoveBlockSE, DX_PLAYTYPE_BACK);
 
 	//↓へ移動する処理
-	for (i = 1; i < HEIGHT - 1; i++)
+	for ( i = 1; i < HEIGHT - 1; i++)
 	{
-		for (j = 1; j < WIDTH - 1; j++)
+		for ( j = 1; j < WIDTH -1; j++)
 		{
 			if (Block[i][j].image == 0)
 			{
-				for (k = i; k > 0; k--)
+				for ( k = i; k > 0; k--)
 				{
 					Block[k][j].image = Block[k - 1][j].image;
 					Block[k - 1][j].image = 0;
@@ -379,9 +375,9 @@ void MoveBlock(void)
 	}
 
 	//空のブロックを生成する処理
-	for (i = 1; i < HEIGHT - 1; i++)
+	for ( i = 1; i < HEIGHT -1; i++)
 	{
-		for (j = 1; j < WIDTH - 1; j++)
+		for ( j = 1; j < WIDTH -1; j++)
 		{
 			if (Block[i][j].image == 0)
 			{
@@ -396,14 +392,14 @@ void MoveBlock(void)
 
 /*********************************
 ステージ制御機能：連鎖チェック処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void CheckBlock(void)
 {
 	int Result = 0;
 	int i, j;
-
+	
 	//ブロック連鎖チェック
 	for ( i = 1; i < HEIGHT -1; i++)
 	{
@@ -414,30 +410,29 @@ void CheckBlock(void)
 	}
 
 	//連鎖がなくなればブロック選択へ
-	//そうでなければブロック移動へ移行して連鎖テックを継続する
+	//そうでなければブロック移動へ移行して連鎖チェックを継続する
 	if (Result == 0)
 	{
-		//クリアチェック処理へ移行する
+		//クリアチェック処理へ移行すrう。
 		Stage_State = 4;
 	}
 	else
 	{
-		//連鎖が3つ以上ならブロックを消しブロック移動処理へ移行する
+		//連鎖が3つ以上ならブロックを消しブロック移動処理へ移動
 		Stage_State = 1;
 	}
 }
 
 /*********************************
 ステージ制御機能：クリア条件チェック処理
-引数：なし
+引　数：なし
 戻り値：なし
 備考：クリア条件フラグを0とし、各スクールの削除ブロックが
-	  レベルよりも数が少なかったらチェック処理を中断してゲーム続行する。
+	　レベルよりも数が少なかったらチェック処理を中断してゲームを続行する。
 *********************************/
 void CheckClear(void)
 {
 	int i;
-
 	for ( i = 0; i < ITEM_MAX; i++)
 	{
 		if (Item[i] >= Stage_Mission) 
@@ -455,7 +450,7 @@ void CheckClear(void)
 
 /*********************************
 ステージ制御機能：ステージステータス情報取得処理
-引数：なし
+引　数：なし
 戻り値：ステージのステータス情報
 *********************************/
 int Get_StageState(void)
@@ -465,18 +460,18 @@ int Get_StageState(void)
 
 /*********************************
 ステージ制御機能：ミッション情報取得処理
-引数：なし
+引　数：なし
 戻り値：ミッションがクリアしているか
 *********************************/
-int Get_StageClearFlag(void) 
+int Get_StageClearFlag(void)
 {
 	return ClearFlag;
 }
 
 /*********************************
-ステージ制御機能：スコア情報取得処理
-引数：なし
-戻り値：ステージのスコア情報
+ステージ制御機能：ステージスコア情報取得処理
+引　数：なし
+戻り値：スコアの情報
 *********************************/
 int Get_StageScore(void)
 {
@@ -484,8 +479,8 @@ int Get_StageScore(void)
 }
 
 /*********************************
-ステージ制御機能：ミッション情報取得処理
-引数：次のミッションに必要な数値
+ステージ制御機能：ステージミッション情報取得処理
+引　数：次のミッションに必要な数値
 戻り値：なし
 *********************************/
 void Set_StageMission(int mission)
@@ -495,8 +490,8 @@ void Set_StageMission(int mission)
 
 /*********************************
 ステージ制御機能：連鎖チェック処理
-引数1：ブロックYマス
-引数2：ブロックXマス
+引　数１：ブロックYマス
+引　数２：ブロックXマス
 戻り値：連鎖有無(0:なし　1:あり)
 *********************************/
 int combo_check(int x, int y)
@@ -510,21 +505,21 @@ int combo_check(int x, int y)
 	combo_check_h(y, x, &CountH, &ColorH);
 	if (CountH < 3)
 	{
-		restore_block();	//3個未満なら戻す
+		restore_block();		//3個未満なら戻す
 	}
 
-	//横方向チェック
+	//横方向のチェック
 	int CountW = 0;
 	int ColorW = 0;
 	save_block();
 	combo_check_w(y, x, &CountW, &ColorW);
 	if (CountW < 3)
 	{
-		restore_block();	//3個未満なら戻す
+		restore_block();
 	}
 
-	//3つ以上で並んでいるか？
-	if ((CountH >= 3 || CountW >= 3))
+	//3つ以上で並んでいるか?
+	if (CountH >= 3 || CountW >= 3)
 	{
 		if (CountH >= 3)
 		{
@@ -538,22 +533,25 @@ int combo_check(int x, int y)
 		}
 		ret = TRUE;
 	}
+
 	return ret;
 }
 
 /*********************************
 ステージ制御機能：連鎖チェック処理(縦方向)
-引数：なし
+引　数：なし
 戻り値：連鎖有無(0:なし　1:あり)
 *********************************/
 void combo_check_h(int y, int x, int* cnt, int* col)
 {
 	int Color = 0;
+	
 	//対象のブロックが外枠の場合はreturnで処理を抜ける
 	if (Block[y][x].image == 0)
 	{
 		return;
 	}
+
 	*col = Block[y][x].image;
 	Color = Block[y][x].image;
 	Block[y][x].image = 0;
@@ -570,18 +568,20 @@ void combo_check_h(int y, int x, int* cnt, int* col)
 }
 
 /*********************************
-ステージ制御機能：連鎖チェック処理(横方向
-引数：なし
-戻り値：連鎖有無(0:なし 1:あり)
+ステージ制御機能：連鎖チェック処理(横方向)
+引　数：なし
+戻り値：連鎖有無(0:なし　1:あり)
 *********************************/
 void combo_check_w(int y, int x, int* cnt, int* col)
 {
 	int Color = 0;
+
 	//対象のブロックが外枠の場合はreturnで処理を抜ける
 	if (Block[y][x].image == 0)
 	{
 		return;
 	}
+
 	*col = Block[y][x].image;
 	Color = Block[y][x].image;
 	Block[y][x].image = 0;
@@ -599,13 +599,12 @@ void combo_check_w(int y, int x, int* cnt, int* col)
 
 /*********************************
 ステージ制御機能：ブロック情報の保存処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void save_block(void)
 {
 	int i, j;
-
 	for ( i = 0; i < HEIGHT; i++)
 	{
 		for ( j = 0; j < WIDTH; j++)
@@ -617,13 +616,12 @@ void save_block(void)
 
 /*********************************
 ステージ制御機能：ブロック情報を戻す処理
-引数：なし
+引　数：なし
 戻り値：なし
 *********************************/
 void restore_block(void)
 {
 	int i, j;
-
 	for (i = 0; i < HEIGHT; i++)
 	{
 		for (j = 0; j < WIDTH; j++)
