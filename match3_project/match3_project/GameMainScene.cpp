@@ -107,7 +107,7 @@ void GameMainScene_Update()
 	}
 
 	//ミッションを達成したら、ゲームクリアに遷移する
-	if (Get_StageClearFlag())
+	if (Get_StageClearFlag() == 1)
 	{
 		Change_Scene(E_GAME_CLEAR);
 	}

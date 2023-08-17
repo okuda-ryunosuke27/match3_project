@@ -437,9 +437,16 @@ void CheckClear(void)
 	{
 		if (Item[i] >= Stage_Mission) 
 		{
-			ClearFlag = TRUE;
 			break;
 		}
+	}
+
+	if (Item[0] >= Stage_Mission && Item[1] >= Stage_Mission &&
+		Item[2] >= Stage_Mission && Item[3] >= Stage_Mission &&
+		Item[4] >= Stage_Mission && Item[5] >= Stage_Mission &&
+		Item[6] >= Stage_Mission && Item[7] >= Stage_Mission)
+	{
+		ClearFlag = TRUE;
 	}
 
 	if (ClearFlag != TRUE)
