@@ -68,6 +68,7 @@ void GameClearScene_Update(void)
 			PlaySoundMem(GameClearSE, DX_PLAYTYPE_BACK);
 			GameClearFlag = TRUE;
 		}
+		
 	}
 }
 

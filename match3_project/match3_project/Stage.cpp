@@ -154,7 +154,7 @@ void StageDraw(void)
 			if (Block[i][j].flg == TRUE && Block[i][j].image != NULL)
 			{
 				DrawGraph(Block[i][j].x, Block[i][j].y, BlockImage[Block[i][j].image], TRUE);
-				DrawFormatString(Block[i][j].x, Block[i][j].y, 0xffffff, "%d", Block[i][j].image);
+				//DrawFormatString(Block[i][j].x, Block[i][j].y, 0xffffff, "%d", Block[i][j].image);
 			}
 		}
 	}
@@ -273,6 +273,10 @@ void SelectBlock(void)
 			Select[TMP_CURSOR].y = Select[SELECT_CURSOR].y;
 			ClickStatus = E_SECOND;
 		}
+	}
+	else if (GetKeyFlg(MOUSE_INPUT_RIGHT))
+	{
+		ClickStatus = E_NONE;
 	}
 
 	//選択ブロックを変換する。
@@ -413,7 +417,7 @@ void CheckBlock(void)
 	//そうでなければブロック移動へ移行して連鎖チェックを継続する
 	if (Result == 0)
 	{
-		//クリアチェック処理へ移行すrう。
+		//クリアチェック処理へ移行する
 		Stage_State = 4;
 	}
 	else
