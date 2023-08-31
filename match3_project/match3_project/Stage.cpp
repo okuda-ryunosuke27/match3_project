@@ -45,14 +45,14 @@ enum
 T_object Block[HEIGHT][WIDTH];			//ブロックオブジェクトデータ
 T_CURSOR Select[3];						//セレクトカーソル座標
 int Item[ITEM_MAX];						//アイテム
-int ClickStatus;						//
-int Stage_State;						//
+int ClickStatus;						//クリックされているかどうあｋ
+int Stage_State;						//ブロックなどの状態
 int Stage_Mission;						//
-int Stage_Score;						//
-int ClearFlag;							//
+int Stage_Score;						//スコアを格納する場所
+int ClearFlag;							//ミッション成功したかどうか
 
-int BlockImage[BLOCK_IMAGE_MAX];		//
-int StageImage;							//
+int BlockImage[BLOCK_IMAGE_MAX];		//ブロック画像
+int StageImage;							//ステージの画像
 int ClickSE;							//クリックSE
 int FadeOutSE;							//フェードアウトSE
 int MoveBlockSE;						//ブロック移動SE
@@ -93,6 +93,9 @@ int StageInitialize(void)
 	Stage_State = 0;
 	Stage_Score = 0;
 	ClearFlag = FALSE;
+	
+	
+
 
 	for ( i = 0; i < 3; i++)
 	{
