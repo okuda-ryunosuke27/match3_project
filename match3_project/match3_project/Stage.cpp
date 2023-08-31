@@ -268,8 +268,8 @@ void SelectBlock(void)
 			ClickStatus = E_ONCE;
 		}
 		else if (ClickStatus == E_ONCE && ((abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 1) &&
-			abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 0) ||
-			(abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 0 &&
+			(abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 0 ) ||
+			(abs(Select[NEXT_CURSOR].x - Select[SELECT_CURSOR].x) == 0 ) &&
 			abs(Select[NEXT_CURSOR].y - Select[SELECT_CURSOR].y) == 1))
 		{
 			Select[TMP_CURSOR].x = Select[SELECT_CURSOR].x;
