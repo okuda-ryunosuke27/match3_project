@@ -60,7 +60,7 @@ void GameOverScene_Update(void)
 	{
 		if (GameOverFlag == TRUE)
 		{
-			Change_Scene(E_GAME_OVER);
+			Change_Scene(E_TITLE);
 		}
 		else
 		{
